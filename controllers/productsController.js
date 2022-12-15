@@ -1,7 +1,7 @@
-let products = require('../data/database')
 const express = require('express')
 const controller = express.Router()
 
+const ProductSchema = require('../schemes/productSchema')
 
 
 controller.param("articleNumber", (req, res, next, articleNumber) => {
@@ -14,6 +14,7 @@ controller.param("tag", (req, res, next, tag) => {
     next()
 })
 
+// unsecured routes
 controller.route('/details/:articleNumber').get((req, res) => {
     if (req.product != undefined)
         res.status(200).json(req.product)
@@ -29,6 +30,7 @@ controller.route('/:tag').get((req, res) => {
         res.status(404).json()
 })
 
+
 controller.route('/:tag/:take').get((req, res) => {
     let list = []
 
@@ -39,8 +41,13 @@ controller.route('/:tag/:take').get((req, res) => {
 
 })
 
-controller.route('/').get((req, res) => {
-    res.status(200).json(products)
+
+controller.route('/').get( async (req, res) => {
+    try {
+        res.status(200).json(await ProductSchema.find())
+    } catch {
+        res.status(400).json()
+    }
 })
 
 
