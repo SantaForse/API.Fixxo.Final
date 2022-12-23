@@ -132,5 +132,46 @@ controller.route('/:articleNumber').delete(async (req, res) => {
     }
 })
 
+// update a product
 
+controller.route('/patch/:articleNumber').put(async (req, res) => {
+    if (!req.params.articleNumber) {
+        res.status(400).json({text: `No article number was specified.`})
+    } else {
+        await productSchema.updateOne(
+            { _id: req.params.articleNumber},
+            { $set: {name: req.body.name}
+        });
+        await productSchema.updateOne(
+            { _id: req.params.articleNumber},
+            { $set: {description: req.body.description}
+        });
+        await productSchema.updateOne(
+            { _id: req.params.articleNumber},
+            { $set: {rating: req.body.rating}
+        });
+        await productSchema.updateOne(
+            { _id: req.params.articleNumber},
+            { $set: {price: req.body.price}
+        });
+        await productSchema.updateOne(
+            { _id: req.params.articleNumber},
+            { $set: {category: req.body.category}
+        });
+        await productSchema.updateOne(
+            { _id: req.params.articleNumber},
+            { $set: {tag: req.body.tag}
+        });
+        await productSchema.updateOne(
+            { _id: req.params.articleNumber},
+            { $set: {oldPrice: req.body.oldPrice}
+        });
+        await productSchema.updateOne(
+            { _id: req.params.articleNumber},
+            { $set: {imageName: req.body.imageName}
+        });
+        res.status(200).json({text: `Updated name: ${req.body.name} ...`})    
+    }
+})
+  
 module.exports = controller 
